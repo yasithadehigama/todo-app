@@ -4,6 +4,9 @@
 
 var express = require("express");
 var mysql = require("mysql");
+var session = require("express-session");
+var bodyParser = require("body-parser");
+var path = require("path");
 
 var app = express();
 var bodyParser = require("body-parser");
@@ -15,9 +18,9 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  return res.send("Hello !");
-});
+// app.get("/", (req, res) => {
+//   return res.send("Hello !");
+// });
 
 app.listen(3000, () => {
   console.log("API is Listing to port 3000");
@@ -34,6 +37,21 @@ var dbConn = mysql.createConnection({
 });
 // connect to database
 dbConn.connect();
+
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true
+  })
+);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+//Loading User Login Page
+app.get("/", function(request, response) {
+  response.sendFile(path.join(__dirname + "/login.html"));
+});
 
 //userSignUp
 app.post("/userSignUp", (req, res) => {
@@ -172,4 +190,3 @@ app.get("/getToDolist/nric/:nric", (req, res) => {
     });
   });
 });
-
