@@ -93,10 +93,9 @@ app.post("/userSignUp", (req, res) => {
 
 //userLogin
 app.post("/userLogin", (req, res) => {
-  var username = req.body.username;
+  var nric = req.body.nric;
   var password = req.body.password;
-  console.log(username + "   ", password);
-  var query = "SELECT * FROM user WHERE `username`='" + username + "'";
+  var query = "SELECT * FROM user WHERE `nric`='" + nric + "'";
   dbConn.query(query, (error, result) => {
     if (error) {
       res.send({
@@ -105,11 +104,10 @@ app.post("/userLogin", (req, res) => {
       });
     }
     if (result[0].password === password) {
-      // res.send({
-      //   status: 200,
-      //   data: "Successfully Logged"
-      // });
-      res.sendFile(path.join(__dirname + "/main.html"));
+      res.send({
+        status: 200,
+        data: "Successfully Logged"
+      });
     } else {
       res.send({
         status: 412,
